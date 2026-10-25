@@ -1,0 +1,8 @@
+{
+  "name": "cloudbeast",
+  "version": "1.0.0",
+  "description": "CloudBeats - Google Drive Cloud Music Player",
+  "scripts": {
+    "build": "git clone https://github.com/flutter/flutter.git --depth 1 -b stable _flutter && _flutter/bin/flutter build web --release"
+  }
+}
