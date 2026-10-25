@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,15 +24,10 @@ class GoogleDriveService {
       return MockDriveData.getSampleSongs();
     }
 
-    final account = _authService.currentUser;
-    if (account == null) {
-      throw Exception('User is not signed in to Google Drive.');
-    }
-
-    // Use the authenticated GoogleSignIn instance
-    final authClient = await _authService.googleSignIn.authenticatedClient();
+    // Use the authenticated client with persistent storage fallback
+    final authClient = await _authService.getAuthenticatedClient();
     if (authClient == null) {
-      throw Exception('Failed to obtain authenticated Google Drive client.');
+      throw Exception('Session expired or not signed in. Please connect Google Drive.');
     }
 
     final driveApi = drive.DriveApi(authClient);

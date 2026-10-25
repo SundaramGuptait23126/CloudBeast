@@ -273,11 +273,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 16),
-                                    ElevatedButton.icon(
-                                      icon: const Icon(Icons.refresh_rounded),
-                                      label: const Text('Try Again'),
-                                      onPressed: _loadSongs,
-                                    ),
+                                    if (library.errorMessage!.toLowerCase().contains('expired') ||
+                                        library.errorMessage!.toLowerCase().contains('sign'))
+                                      ElevatedButton.icon(
+                                        icon: const Icon(Icons.account_circle_outlined),
+                                        label: const Text('Reconnect Google Drive'),
+                                        onPressed: () async {
+                                          final success = await auth.signInWithGoogle();
+                                          if (success) _loadSongs();
+                                        },
+                                      )
+                                    else
+                                      ElevatedButton.icon(
+                                        icon: const Icon(Icons.refresh_rounded),
+                                        label: const Text('Try Again'),
+                                        onPressed: _loadSongs,
+                                      ),
                                   ],
                                 ),
                               ),

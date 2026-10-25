@@ -36,7 +36,12 @@ class AuthProvider extends ChangeNotifier {
         _isDemoMode = true;
         _user = UserProfile.demo();
       } else {
-        final profile = await _authService.signInSilently();
+        // 1. Try silent sign-in
+        UserProfile? profile = await _authService.signInSilently();
+
+        // 2. Fallback to saved persistent session on page refresh
+        profile ??= await _authService.loadSavedProfile();
+
         if (profile != null) {
           _user = profile;
         }
